@@ -83,6 +83,14 @@ export default function ProjectDetailsPage() {
         });
     };
 
+    const [baseUrl, setBaseUrl] = useState("http://localhost:3000");
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            setBaseUrl(window.location.origin);
+        }
+    }, []);
+
     if (loading && !data) {
         return (
             <AuthGuard>
@@ -191,7 +199,7 @@ export default function ProjectDetailsPage() {
                     <div className="grid md:grid-cols-2 gap-4">
                         {project.endpoints.map((ep: any) => {
                             const formattedPath = ep.path.startsWith('/') ? ep.path : `/${ep.path}`;
-                            const curlCommand = `curl -X ${ep.method} http://localhost:8080/mock/${id}${formattedPath}`;
+                            const curlCommand = `curl -X ${ep.method} ${baseUrl}/mock/${id}${formattedPath}`;
                             return (
                                 <Card key={ep.id} className="bg-content1/50 border border-divider hover:-translate-y-1 transition-transform text-left">
                                     <div
